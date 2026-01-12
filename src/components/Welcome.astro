@@ -1,0 +1,134 @@
+---
+import background from '../assets/background.svg';
+import alarmaMoto from '../assets/alarmaMoto.jpg';
+import Producto from './Producto.astro';
+import alarmaAuto from '../assets/alarmaAuto.jpg'
+import carrito from '../assets/carrito.jpg'
+
+const productos = [
+  {
+    id: 1,
+    nombre: "Alarma para moto",
+    precio: 25000,
+    imagen: alarmaMoto
+    
+  },
+  {
+    id: 2,
+    nombre: "Alarma para auto",
+    precio: 25000,
+    imagen: alarmaAuto
+    
+  }
+];
+---
+
+<header class="header">
+  <div class="carrito" id="btn-carrito">
+    <img src={carrito.src} width="40" />
+    <span id="contador">0</span>
+  </div>
+</header>
+
+<div id="panel-carrito" class="panel-carrito oculto">
+  <h3>Carrito</h3>
+  <ul id="lista-carrito"></ul>
+</div>
+
+
+
+
+
+<div id="container">
+  <main>
+    <h1>Nuestros productos</h1>
+
+    <section class="productos">
+      {productos.map(p => (
+        <Producto
+          id={p.id}
+          nombre={p.nombre}
+          precio={p.precio}
+          imagen={p.imagen}
+          
+        />
+      ))}
+    </section>
+  </main>
+</div>
+
+<script>
+  const btnCarrito = document.getElementById('btn-carrito');
+  const panelCarrito = document.getElementById('panel-carrito');
+
+  btnCarrito.addEventListener('click', () => {
+    panelCarrito.classList.toggle('oculto');
+  });
+</script>
+
+<script>
+  const carrito = [];
+  const contador = document.getElementById('contador');
+
+  document.querySelectorAll('.btn-agregar').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const producto = btn.closest('.producto');
+
+      const id = producto.dataset.id;
+      const nombre = producto.querySelector('h2').textContent;
+      const precio = producto.querySelector('p').textContent;
+
+      carrito.push({ id, nombre, precio });
+
+      contador.textContent = carrito.length;
+
+      console.log(carrito);
+    });
+  });
+</script>
+
+
+<style>
+  .productos {
+    display: flex;
+    gap: 20px;
+  }
+  .header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.carrito {
+  position: relative;
+  cursor: pointer;
+}
+
+#contador {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+.panel-carrito {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  width: 260px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.oculto {
+  display: none;
+}
+
+</style>
+
