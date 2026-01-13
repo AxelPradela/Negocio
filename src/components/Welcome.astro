@@ -33,6 +33,7 @@ const productos = [
 <div id="panel-carrito" class="panel-carrito oculto">
   <h3>Carrito</h3>
   <ul id="lista-carrito"></ul>
+  <p id="total">Total: $0</p>
 </div>
 
 
@@ -67,8 +68,45 @@ const productos = [
 </script>
 
 <script>
+
+
   const carrito = [];
+
+  const listaCarrito = document.getElementById('lista-carrito');
+  const totalElemento = document.getElementById('total');
+
+  
+
+function renderCarrito() {
+  listaCarrito.innerHTML = "";
+
+  carrito.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.nombre} - ${item.precio}`;
+    listaCarrito.appendChild(li);
+  });
+
+  
+
+
+
+}
+function calcularTotal() {
+  let total = 0;
+
+  carrito.forEach(item => {
+    total += item.precio;
+  });
+
+  return total;
+}
+
   const contador = document.getElementById('contador');
+
+  function renderTotal() {
+  const total = calcularTotal();
+  totalElemento.textContent = `Total: $${total}`;
+}
 
   document.querySelectorAll('.btn-agregar').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -76,16 +114,22 @@ const productos = [
 
       const id = producto.dataset.id;
       const nombre = producto.querySelector('h2').textContent;
-      const precio = producto.querySelector('p').textContent;
+      const precioTexto = producto.querySelector('p').textContent;
+      const precio = Number(precioTexto.replace('$', ''));
 
       carrito.push({ id, nombre, precio });
 
       contador.textContent = carrito.length;
+      renderCarrito();
+      renderTotal();
+      
 
       console.log(carrito);
     });
   });
 </script>
+
+
 
 
 <style>
